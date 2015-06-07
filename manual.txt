@@ -1,0 +1,45 @@
+vagrant ssh
+cd /vagrant/
+sudo cp sources.list /etc/apt/sources.list
+sudo apt-get update
+sudo apt-get install git
+
+sudo bash
+adduser stack
+echo "stack ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+exit
+
+su stack
+cd ~
+sudo rsync -avz /vagrant/devstack .
+sudo rsync -avz /vagrant/stack /opt/
+sudo chown -R stack:stack devstack
+sudo chown -R stack:stack /opt/stack
+#git clone https://github.com/openstack-dev/devstack.git /home/stack/devstack
+cd devstack
+chmod +x stack.sh
+vim local.conf
+
+local.conf
+[[local|localrc]]
+ADMIN_PASSWORD=1234
+DATABASE_PASSWORD=$ADMIN_PASSWORD
+RABBIT_PASSWORD=$ADMIN_PASSWORD
+SERVICE_PASSWORD=$ADMIN_PASSWORD
+SERVICE_TOKEN=$ADMIN_PASSWORD
+
+GIT_BASE=${GIT_BASE:-https://git.openstack.org}
+
+HOST_IP=10.0.0.22
+
+FLOATING_RANGE=10.0.0.33/27 #ip instance
+FIXED_RANGE=10.0.2.0/24 #iplocal host-only
+FIXED_NETWORK_SIZE=256
+FLAT_INTERFACE=eth1 #interface yg punya ip local
+
+LOGFILE=$DEST/logs/stack.sh.log
+LOGDAYS=2
+SWIFT_HASH=66a3d6b56c1f479c8b4e70ab5c2000f5
+SWIFT_REPLICAS=1
+SWIFT_DATA_DIR=$DEST/data
+enable_service tempest
