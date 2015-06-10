@@ -1,17 +1,25 @@
 node default {
+	#include local_repo
 	#include users
-	include git
+	#include git
+	#include conf
+	include run_stack
 
-## 2. Ganti Sources List
-#file {'sourcelist':
-#    path => '/etc/apt/sources.list',
-#    ensure => present,
-#    source => '/vagrant/puppet/modules/local_repo/sources.list',
-#}
+## echo "stack ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-# git::clone { 'https://github.com/tuanpembual/04webkplijogja.git':
+## clone epo devstack
+# git::clone { 'https://github.com/openstack-dev/devstack.git':
 #     path => '/home/stack',
 #     dir => 'devstack',
-#}
+# }
+
+## hak Akses
+# file { '/home/stack/':
+#     ensure => directory,
+# 	recurse => true, # enable recursive directory management
+#     owner => 'stack',
+#     group => 'stack',
+#     mode => 755,
+# }
 
 }
