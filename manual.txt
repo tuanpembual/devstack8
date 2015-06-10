@@ -1,4 +1,5 @@
 vagrant ssh
+
 cd /vagrant/
 sudo cp sources.list /etc/apt/sources.list
 sudo apt-get update
@@ -43,3 +44,9 @@ SWIFT_HASH=66a3d6b56c1f479c8b4e70ab5c2000f5
 SWIFT_REPLICAS=1
 SWIFT_DATA_DIR=$DEST/data
 enable_service tempest
+
+./stack.sh
+
+#PowerOff
+sudo halt
+./rejoin-stack.sh &
